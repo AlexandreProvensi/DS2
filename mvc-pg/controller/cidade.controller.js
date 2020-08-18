@@ -1,11 +1,8 @@
-const pessoaRepository = require('../repository/pessoa.repository');
+const cidadeRepository = require('../repository/cidade.repository');
 
-//Camada Controller
 module.exports = {
-
-    //Retorna TODOS
     find: (req, res) => {
-        pessoaRepository.find()
+        cidadeRepository.find()
             .then((result) => {
                 res.send(result.rows);
             })
@@ -13,12 +10,10 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-
-    //Retorna pelo ID
     findOne: (req, res) => {
         const id = req.params.id;
 
-        pessoaRepository.findOne(id)
+        cidadeRepository.findOne(id)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -32,12 +27,10 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-
-    //Adiciona um registro
     create: (req, res) => {
-        const pessoa = req.body;
+        const cidade = req.body;
 
-        pessoaRepository.create(pessoa)
+        cidadeRepository.create(cidade)
             .then((result) => {
                 res.status(201).send(result.rows[0]);
             })
@@ -45,16 +38,14 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-
-    //Altera um registro
     update: (req, res) => {
         //Pega o conteúdo do corpo da requisição
-        const pessoa = req.body;
+        const cidade = req.body;
 
         //Atribui o ID do item baseado no parametro da URL
-        pessoa.id = req.params.id;
+        cidade.id = req.params.id;
 
-        pessoaRepository.update(pessoa)
+        cidadeRepository.update(cidade)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -68,14 +59,12 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-
-    //Remove um registro
     delete: (req, res) => {
 
         //Pega o ID a ser excluído através da URL
         var id = req.params.id;
 
-        pessoaRepository.delete(id)
+        cidadeRepository.delete(id)
             .then((result) => {
 
                 if (result.rowCount > 0) {
@@ -89,5 +78,4 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-
 }

@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const connection = require('./pg-connection');
-const pessoaRoutes = require('./routes/pessoa.route');
+const routes = require('./routes');
 
 //Instanciar aplicação
 const app = express();
@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
     res.send('<h1>Projeto de exemplo de conexão com Banco de Dados</h1>');
 });
 
-//Adiciona rota para tabela "pessoa"
-app.use(pessoaRoutes);
+//Adiciona todas as rotas
+app.use(routes);
 
 //Estabelece uma conexão com o banco de dados
 connection.connect()
