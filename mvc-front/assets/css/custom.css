@@ -1,0 +1,141 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.sign {
+    margin: 0 auto;
+    padding-top: 60px;
+    width: 450px;
+}
+
+.sign .card {
+    margin-bottom: 15px;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+.conteudo .navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.avatar-sm {
+    width: 42px;
+    height: 42px;
+}
+
+.avatar-md {
+    width: 66px;
+    height: 66px;
+}
+
+.avatar~span {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.feeds {
+    margin-top: 50px;
+    padding: 30px;
+}
+
+.feeds .col-4 {
+    padding-top: 20px;
+}
+
+.feeds .card {
+    margin: 20px;
+}
+
+.feeds .card-header {
+    background-color: #fff;
+}
+
+.feeds .card-body {
+    padding: 0;
+}
+
+.feed-time {
+    font-size: 10px;
+    letter-spacing: 0.2px;
+    color: rgb(142, 142, 142);
+    margin: 10px 20px;
+}
+
+.card-side {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.card-side .media {
+    margin-top: 10px;
+}
+
+.card-side .media h5 {
+    margin: 0;
+}
+
+.card-side button {
+    margin: 10px 0;
+}
+
+.card-side h4 {
+    color: #8e8e8e;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.no-feeds {
+    margin-top: 60px;
+}
+
+.curtir {
+    display: flex;
+    margin: 20px;
+}
+
+.curtir p {
+    margin: 0;
+}
+
+.curtir svg {
+    margin-right: 10px;
+}
+
+.card-body .list-unstyled {
+    padding: 0;
+    margin: 20px;
+}
+
+.card-body .list-unstyled p {
+    margin: 0;
+}
+
+.comentario {
+    margin-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 15px;
+}
+
+.comentario input {
+    background: 0 0;
+    border: 0;
+    color: #262626;
+    display: flex;
+    flex-grow: 1;
+    font-size: 14px;
+    height: 18px;
+    outline: 0;
+    padding: 0;
+}
