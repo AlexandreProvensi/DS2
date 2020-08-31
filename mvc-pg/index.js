@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const connection = require('./pg-connection');
+const cors = require('cors');
 const routes = require('./routes');
 
 //Instanciar aplicação
@@ -11,6 +12,9 @@ const port = 3000;
 
 //Adicionar o body-parser à aplicação
 app.use(bodyParser.json());
+
+//Adicionar o Cors à aplicação
+app.use(cors());
 
 //Rota para raíz
 app.get('/', (req, res) => {

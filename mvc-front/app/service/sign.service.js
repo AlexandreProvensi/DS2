@@ -13,9 +13,14 @@
             return $http.post(urlSaaS + '/signup', newuser);
         }
 
+        function exists(username) {
+            return $http.post(urlSaaS + '/exists/' + username);
+        }
+
         return {
             entrar: signin,
-            cadastrar: signup
+            cadastrar: signup,
+            existe: exists
         }
 
     });

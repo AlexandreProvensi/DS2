@@ -7,6 +7,18 @@ appDS2.config(function($routeProvider) {
         .when('/signin', {
             templateUrl: 'app/template/signin.html',
             controller: 'SignController'
-        });
+        })
+
+    .when('/signup', {
+        templateUrl: 'app/template/signup.html',
+        controller: 'SignController'
+    })
+
+    .when('/feed', {
+        templateUrl: 'app/template/feed.html',
+        controller: 'FeedController'
+    })
+
+    .otherwise({ redirectTo: '/signin' });
 
 });

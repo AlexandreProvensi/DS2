@@ -47,14 +47,14 @@ module.exports = {
 
         usuarioRepository.signin(usuario.username, usuario.password)
             .then(result => {
-                if (result.rows.length > 0) {
-                    res.send(result.rows[0]);
-                } else {
-                    res.status(403).send({ msg: 'Usuario e senha inválidos' });
-                }
+                res.send(result.rows[0]);
             })
             .catch(error => {
-                res.status(500).send({ msg: error.message });
+                if (error.failtype) {
+                    res.status(403).send({ failtype: error.failtype, msg: error.message });
+                } else {
+                    res.status(500).send({ msg: error.message });
+                }
             });
     },
 
