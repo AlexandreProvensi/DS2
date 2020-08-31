@@ -19,7 +19,8 @@
                 })
                 .catch(error => {
                     if (error.status === 403) {
-                        $scope.fail = true;
+                        $scope.failUser = error.data.failtype == 'auth-fail-username';
+                        $scope.failPass = error.data.failtype == 'auth-fail-password';
                         $scope.msgError = error.data.msg;
                     } else {
                         $scope.fatalError = error.data.msg;
