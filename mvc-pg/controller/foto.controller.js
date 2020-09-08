@@ -1,36 +1,61 @@
-const FotoRepository = require('../repository/foto.repository');
+const fotoRepository = require('../repository/foto.repository');
+const usuarioRepository = require('../repository/usuario.repository');
+const comentarioRepository = require('../repository/comentario.repository');
+const curtidaRepository = require('../repository/curtida.repository');
 
 module.exports = {
-    find: (req, res) => {
-        FotoRepository.find()
-            .then((result) => {
-                res.send(result.rows);
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+    find: async(req, res) => {
+
+        //Pega o nome do usuário a partir de seu username
+        const usuario = await usuarioRepository.getByUsername(req.username);
+
+        //Existe um usuário com este username?
+        if (usuario) {
+
+            try {
+
+                //Tenta pegar as fotos deste usuário
+                const fotos = await fotoRepository.find(usuario);
+                res.send(fotos);
+
+            } catch (error) {
+                res.status(500).send(error);
+            }
+
+        } else {
+            res.status(404).send({ message: 'Usuário não foi encontrado' });
+        }
     },
-    findOne: (req, res) => {
-        const id = req.params.id;
+    findOne: async(req, res) => {
 
-        FotoRepository.findOne(id)
-            .then((result) => {
+        try {
+            //Pega o nome do usuário a partir de seu username
+            const usuario = await usuarioRepository.getByUsername(req.username);
 
-                if (result.rows.length > 0) {
-                    res.send(result.rows[0]);
+            //Existe um usuário com este username?
+            if (usuario) {
+
+                //Pega a foto pelo seu ID
+                const foto = await fotoRepository.findOne(usuario, req.params.id);
+
+                //Existe uma foto com este ID?
+                if (foto) {
+                    res.send(foto);
                 } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
+                    res.status(404).send({ message: 'Foto não foi encontrada' });
                 }
-
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+            } else {
+                res.status(404).send({ message: 'Usuário não foi encontrado  ' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send(error);
+        }
     },
     create: (req, res) => {
-        const Foto = req.body;
+        const foto = req.body;
 
-        FotoRepository.create(Foto)
+        fotoRepository.create(foto)
             .then((result) => {
                 res.status(201).send(result.rows[0]);
             })
@@ -38,44 +63,98 @@ module.exports = {
                 res.status(500).send({ msg: error.message });
             });
     },
-    update: (req, res) => {
-        //Pega o conteúdo do corpo da requisição
-        const Foto = req.body;
+    delete: async(req, res) => {
 
-        //Atribui o ID do item baseado no parametro da URL
-        Foto.id = req.params.id;
+        try {
+            //Pega o nome do usuário a partir de seu username
+            const usuario = await usuarioRepository.getByUsername(req.username);
 
-        FotoRepository.update(Foto)
-            .then((result) => {
+            //Existe um usuário com este username?
+            if (usuario) {
 
-                if (result.rows.length > 0) {
-                    res.send(result.rows[0]);
+                //Pega a foto pelo seu ID
+                const foto = await fotoRepository.findOne(usuario, req.params.id);
+
+                //Existe uma foto com este ID?
+                if (foto) {
+                    //Marcar a foto como excluída setando o status como 'N'
+                    foto.status = 'N';
+
+                    //Atualiza foto
+                    await fotoRepository.update(foto);
+                    res.send({ message: 'Foto foi removida' });
                 } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
+                    res.status(404).send({ message: 'Foto não foi encontrada' });
+                }
+            } else {
+                res.status(404).send({ message: 'Usuário não foi encontrado  ' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send(error);
+        }
+
+    },
+    getComentarios: async(req, res) => {
+
+        try {
+            //Pega o nome do usuário a partir de seu username
+            const usuario = await usuarioRepository.getByUsername(req.username);
+
+            //Existe um usuário com este username?
+            if (usuario) {
+
+                //Pega a foto pelo seu ID
+                const foto = await fotoRepository.findOne(usuario, req.params.id);
+
+                //Existe uma foto com este ID?
+                if (foto) {
+
+                    //Busca os comentarios da foto
+                    const comentarios = await comentarioRepository.findByFoto(foto);
+                    res.send(comentarios);
+
+                } else {
+                    res.status(404).send({ message: 'Foto não foi encontrada' });
                 }
 
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+            } else {
+                res.status(404).send({ message: 'Usuário não foi encontrado  ' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send(error);
+        }
     },
-    delete: (req, res) => {
+    getCurtidas: async(req, res) => {
 
-        //Pega o ID a ser excluído através da URL
-        var id = req.params.id;
+        try {
+            //Pega o nome do usuário a partir de seu username
+            const usuario = await usuarioRepository.getByUsername(req.username);
 
-        FotoRepository.delete(id)
-            .then((result) => {
+            //Existe um usuário com este username?
+            if (usuario) {
 
-                if (result.rowCount > 0) {
-                    res.status(204).send();
+                //Pega a foto pelo seu ID
+                const foto = await fotoRepository.findOne(usuario, req.params.id);
+
+                //Existe uma foto com este ID?
+                if (foto) {
+
+                    //Busca os curtidas da foto
+                    const curtidas = await curtidaRepository.findByFoto(foto);
+                    res.send(curtidas);
+
                 } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
+                    res.status(404).send({ message: 'Foto não foi encontrada' });
                 }
 
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
-    },
+            } else {
+                res.status(404).send({ message: 'Usuário não foi encontrado  ' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send(error);
+        }
+    }
 }

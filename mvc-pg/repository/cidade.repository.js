@@ -1,19 +1,27 @@
 const conn = require('../pg-connection');
 
+//Consulta padrão, utilizada em todas os SELECT
+const queryDefault = 'select * from cidade';
+
 module.exports = {
-    find: () => {
-        return conn.query('select * from cidade order by id');
+    find: async() => {
+        const cidadeResult = await conn.query(queryDefault + ' order by id');
+        return cidadeResult.rows;
     },
-    findOne: (id) => {
-        return conn.query('select * from cidade where id = $1', [id]);
+    findOne: async(id) => {
+        const cidadeResult = await conn.query(queryDefault + ' where id = $1', [id]);
+        return cidadeResult.rows[0];
     },
-    create: (cidade) => {
-        return conn.query('insert into cidade(nome, uf) values($1,$2) returning *', [cidade.nome, cidade.uf]);
+    create: async(cidade) => {
+        const cidadeResult = await conn.query('insert into cidade(nome, uf) values($1,$2) returning *', [cidade.nome, cidade.uf]);
+        return cidadeResult.rows[0];
     },
-    update: (cidade) => {
-        return conn.query('update cidade set nome = $1, uf = $2 where id = $3 returning *', [cidade.nome, cidade.uf, cidade.id]);
+    update: async(cidade) => {
+        const cidadeResult = await conn.query('update cidade set nome = $1, uf = $2 where id = $3 returning *', [cidade.nome, cidade.uf, cidade.id]);
+        return cidadeResult.rows[0];
     },
-    delete: (id) => {
-        return conn.query('delete from cidade where id = $1', [id]);
+    delete: async(id) => {
+        const cidadeResult = await conn.query('delete from cidade where id = $1', [id]);
+        return cidadeResult.rowCount > 0;
     }
 };

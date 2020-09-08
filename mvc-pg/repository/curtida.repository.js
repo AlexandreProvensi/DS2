@@ -16,7 +16,30 @@ module.exports = {
     delete: (id) => {
         return conn.query('delete from curtida where id = $1', [id]);
     },
-    findByFoto: (foto) => {
-        return conn.query('select * from curtida where foto_id = $1 order by id desc', [foto.id]);
+    findByFoto: async(foto) => {
+        const query = `select curtida.id, usuario.id as usuario_id, usuario.username 
+                       from curtida
+                       inner join usuario on usuario.id = curtida.usuario_id
+                       where curtida.foto_id = $1
+                       order by curtida.id`;
+
+        const curtidaResult = await conn.query(query, [foto.id]);
+
+        const curtidas = [];
+
+        //Ajusta o objeto de retorno
+        for (index in curtidaResult.rows) {
+            let curtida = {
+                id: curtidaResult.rows[index].id,
+                usuario: {
+                    id: curtidaResult.rows[index].usuario_id,
+                    username: curtidaResult.rows[index].username
+                }
+            }
+
+            curtidas.push(curtida);
+        }
+
+        return curtidas;
     }
 };

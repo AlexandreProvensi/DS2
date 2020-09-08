@@ -1,8 +1,13 @@
 const conn = require('../pg-connection');
 
+const queryDefault = `select usuario.id, usuario.username, pessoa.nome, pessoa.email from usuario
+                      inner join pessoa on pessoa.usuario_id = usuario.id`;
+
+
 module.exports = {
-    create: (username, password) => {
-        return conn.query('insert into usuario (username, password) values ($1,$2) returning id', [username, password]);
+    create: async(username, password) => {
+        const usuarioResult = await conn.query('insert into usuario (username, password) values ($1,$2) returning id, username', [username, password]);
+        return usuarioResult.rows[0];
     },
     signin: async(username, password) => {
 
@@ -11,9 +16,7 @@ module.exports = {
 
         if (userResult.rowCount > 0) {
             //Usuário é válido e agora precisa validar a senha
-            let sql = 'select pessoa.id, usuario.username, pessoa.nome, pessoa.email from usuario ' +
-                'inner join pessoa on pessoa.usuario_id = usuario.id ' +
-                'where username = $1 and password = $2';
+            let sql = queryDefault + ' where username = $1 and password = $2';
 
             //Se o usuário for válido, verifico a senha
             const passResult = await conn.query(sql, [username, password]);
@@ -36,11 +39,20 @@ module.exports = {
                 reject({ failtype: 'auth-fail-username', message: 'O usuário não foi encontrado' });
             });
         }
-
-
-
     },
-    usernameExists: (username) => {
-        return conn.query('select username from usuario where username = $1', [username]);
+    getByUsername: async(username) => {
+        const userResult = await conn.query(queryDefault + ' where username = $1', [username]);
+
+        //Se não encontrar um usuário com o username, retorna FALSE
+        if (userResult.rowCount == 0) {
+            return false;
+        }
+
+        return {
+            id: userResult.rows[0].id,
+            nome: userResult.rows[0].nome,
+            email: userResult.rows[0].email,
+            username: userResult.rows[0].username
+        }
     }
 }

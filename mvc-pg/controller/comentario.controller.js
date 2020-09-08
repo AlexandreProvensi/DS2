@@ -1,8 +1,8 @@
-const ComentarioRepository = require('../repository/comentario.repository');
+const comentarioRepository = require('../repository/comentario.repository');
 
 module.exports = {
     find: (req, res) => {
-        ComentarioRepository.find()
+        comentarioRepository.find()
             .then((result) => {
                 res.send(result.rows);
             })
@@ -13,7 +13,7 @@ module.exports = {
     findOne: (req, res) => {
         const id = req.params.id;
 
-        ComentarioRepository.findOne(id)
+        comentarioRepository.findOne(id)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -30,7 +30,7 @@ module.exports = {
     create: (req, res) => {
         const comentario = req.body;
 
-        ComentarioRepository.create(comentario)
+        comentarioRepository.create(comentario)
             .then((result) => {
                 res.status(201).send(result.rows[0]);
             })
@@ -43,9 +43,9 @@ module.exports = {
         const comentario = req.body;
 
         //Atribui o ID do item baseado no parametro da URL
-        Comentario.id = req.params.id;
+        comentario.id = req.params.id;
 
-        ComentarioRepository.update(comentario)
+        comentarioRepository.update(comentario)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -64,7 +64,7 @@ module.exports = {
         //Pega o ID a ser excluído através da URL
         var id = req.params.id;
 
-        ComentarioRepository.delete(id)
+        comentarioRepository.delete(id)
             .then((result) => {
 
                 if (result.rowCount > 0) {

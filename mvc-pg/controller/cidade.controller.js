@@ -1,81 +1,77 @@
 const cidadeRepository = require('../repository/cidade.repository');
 
 module.exports = {
-    find: (req, res) => {
-        cidadeRepository.find()
-            .then((result) => {
-                res.send(result.rows);
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+    find: async(req, res) => {
+        //Tenta buscar todas as cidades
+        try {
+            const cidades = await cidadeRepository.find();
+            res.send(cidades);
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send({ message: error.message });
+        }
     },
-    findOne: (req, res) => {
-        const id = req.params.id;
+    findOne: async(req, res) => {
+        try {
+            //Busca a cidade com o ID passado por parâmetro
+            const cidade = await cidadeRepository.findOne(req.params.id);
 
-        cidadeRepository.findOne(id)
-            .then((result) => {
-
-                if (result.rows.length > 0) {
-                    res.send(result.rows[0]);
-                } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
-                }
-
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+            if (cidade) {
+                res.send(cidade);
+            } else {
+                res.status(404).send({ message: 'Não existe uma cidade com o ID informado' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send({ message: error.message });
+        }
     },
-    create: (req, res) => {
-        const cidade = req.body;
-
-        cidadeRepository.create(cidade)
-            .then((result) => {
-                res.status(201).send(result.rows[0]);
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+    create: async(req, res) => {
+        //Tenta inserir uma nova cidade
+        try {
+            const cidade = await cidadeRepository.create(req.body);
+            res.send(cidade);
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send({ message: error.message });
+        }
     },
-    update: (req, res) => {
-        //Pega o conteúdo do corpo da requisição
-        const cidade = req.body;
+    update: async(req, res) => {
+        try {
+            //Busca a cidade com o ID passado por parâmetro para ver se existe
+            const cidade = await cidadeRepository.findOne(req.params.id);
 
-        //Atribui o ID do item baseado no parametro da URL
-        cidade.id = req.params.id;
+            if (cidade) {
+                const cidadeAtualizada = req.body;
 
-        cidadeRepository.update(cidade)
-            .then((result) => {
+                //Atribui o ID do item baseado no parametro da URL
+                cidadeAtualizada.id = cidade.id;
 
-                if (result.rows.length > 0) {
-                    res.send(result.rows[0]);
-                } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
-                }
-
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+                //Atualiza a cidade
+                await cidadeRepository.update(cidadeAtualizada)
+                res.send(cidadeAtualizada);
+            } else {
+                res.status(404).send({ message: 'Não existe uma cidade com o ID informado' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send({ message: error.message });
+        }
     },
-    delete: (req, res) => {
+    delete: async(req, res) => {
+        try {
+            //Busca a cidade com o ID passado por parâmetro
+            const cidade = await cidadeRepository.findOne(req.params.id);
 
-        //Pega o ID a ser excluído através da URL
-        var id = req.params.id;
-
-        cidadeRepository.delete(id)
-            .then((result) => {
-
-                if (result.rowCount > 0) {
-                    res.status(204).send();
-                } else {
-                    res.status(404).send({ msg: 'Registro não encontrado' });
-                }
-
-            })
-            .catch((error) => {
-                res.status(500).send({ msg: error.message });
-            });
+            if (cidade) {
+                await cidadeRepository.delete(cidade.id);
+                res.status(204).send({ message: 'A cidade foi excluída' });
+            } else {
+                res.status(404).send({ message: 'Não existe uma cidade com o ID informado' });
+            }
+        } catch (error) {
+            //Deu erro?
+            res.status(500).send({ message: error.message });
+        }
     },
 }

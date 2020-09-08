@@ -1,8 +1,8 @@
-const CurtidaRepository = require('../repository/curtida.repository');
+const curtidaRepository = require('../repository/curtida.repository');
 
 module.exports = {
     find: (req, res) => {
-        CurtidaRepository.find()
+        curtidaRepository.find()
             .then((result) => {
                 res.send(result.rows);
             })
@@ -13,7 +13,7 @@ module.exports = {
     findOne: (req, res) => {
         const id = req.params.id;
 
-        CurtidaRepository.findOne(id)
+        curtidaRepository.findOne(id)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -28,9 +28,9 @@ module.exports = {
             });
     },
     create: (req, res) => {
-        const Curtida = req.body;
+        const curtida = req.body;
 
-        CurtidaRepository.create(Curtida)
+        curtidaRepository.create(curtida)
             .then((result) => {
                 res.status(201).send(result.rows[0]);
             })
@@ -40,12 +40,12 @@ module.exports = {
     },
     update: (req, res) => {
         //Pega o conteúdo do corpo da requisição
-        const Curtida = req.body;
+        const curtida = req.body;
 
         //Atribui o ID do item baseado no parametro da URL
-        Curtida.id = req.params.id;
+        curtida.id = req.params.id;
 
-        CurtidaRepository.update(Curtida)
+        curtidaRepository.update(curtida)
             .then((result) => {
 
                 if (result.rows.length > 0) {
@@ -64,7 +64,7 @@ module.exports = {
         //Pega o ID a ser excluído através da URL
         var id = req.params.id;
 
-        CurtidaRepository.delete(id)
+        curtidaRepository.delete(id)
             .then((result) => {
 
                 if (result.rowCount > 0) {

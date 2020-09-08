@@ -8,7 +8,7 @@ const routes = require('./routes');
 const app = express();
 
 //Porta da aplicação
-const port = 3000;
+const port = 3333;
 
 //Adicionar o body-parser à aplicação
 app.use(bodyParser.json());
