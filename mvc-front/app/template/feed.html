@@ -1,1 +1,91 @@
-<h1>Feed</h1>
+<div class="conteudo">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/img/logomarca.png" loading="lazy">
+            </a>
+
+            <div class="collapse navbar-collapse justify-content-stretch">
+                <div class="navbar-nav ml-auto">
+                    <div class="nav-item btn-group">
+                        <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
+                            <img class="avatar avatar-sm" ng-src="{{'assets/img/avatar_default.svg'}}">
+                            {{logado.nome}}
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdownitem btn btn-link" ng-href="#!/{{logado.username}}">Perfil</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdownitem btn btn-link" ng-href="#!/signout">Sair</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="feeds container">
+        <div class="row">
+            <div class="col-8">
+                <div class="no-feeds" ng-if="feeds.length == 0">
+                    <p class="lead text-center">Nenhuma postagem foi feita ainda!</p>
+                </div>
+                <div class="card" ng-repeat="feed in feeds | orderBy:'-id'">
+                    <div class="card-header">
+                        <img class="avatar avatar-sm" src="assets/img/avatar_default.svg">
+                        <span>{{feed.usuario.username}}</span>
+                    </div>
+                    <img ng-src="{{feed.caminho}}" class="card-img-top">
+                    <div class="card-body">
+                        <p class="feed-time">Postado em <time>{{feed.dtpost | date:'dd/MM/yyyy'}} às {{feed.dtpost | date:'HH:mm'}}</time></p>
+
+                        <div class="curtir">
+                            <svg fill="#ed4956" height="24" viewBox="0 0 48 48" width="24" ng-if="feed.curtidas > 0">
+                                <path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
+                            </svg>
+                            <p class="text-muted" ng-if="feed.curtidas == 1">Curtido 1 vez</p>
+                            <p class="text-muted" ng-if="feed.curtidas > 1">Curtido {{feed.curtidas}} vezes</p>
+                            <span class="spacer"></span>
+                            <button class="btn btn-outline-primary" ng-click="curtir(feed)">Curtir</button>
+                        </div>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <p><strong>{{feed.usuario.username}}</strong> {{feed.descricao}}</p>
+                            </li>
+                        </ul>
+
+                        <div class="comentario">
+                            <div class="form-inline">
+                                <input type="text" placeholder="Adicione um comentário..." ng-model="feed.novocomentario">
+                                <button class="btn btn-link" ng-click="publicar(feed)" ng-disabled="!feed.novocomentario">Publicar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card-side">
+                    <div class="media">
+                        <img class="mr-3 avatar avatar-md" ng-src="assets/img/avatar_default.svg">
+                        <div class="media-body">
+                            <h5>{{logado.username}}</h5>
+                            <p>{{logado.nome}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-side">
+                    <h4>Sugestão para você</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="pessoa in pessoas | filter:{seguido: false}">
+                            <div>
+                                <img class="avatar avatar-sm" src="assets/img/avatar_default.svg">
+                                <span>{{pessoa.usuario.username}}</span>
+                            </div>
+                            <butto class="btn btn-link btn-sm" ng-click="seguir(pessoa)">Seguir</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
