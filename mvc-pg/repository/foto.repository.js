@@ -1,8 +1,8 @@
 const conn = require('../pg-connection');
 
 const queryDefault = `select foto.*,
-                        (select count(id) from curtida where foto_id = foto.id) as curtidas,
-                        (select count(id) from comentario where foto_id = foto.id and status = 'S') as comentarios
+                        (select cast(count(id) as integer) from curtida where foto_id = foto.id) as curtidas,
+                        (select cast(count(id) as integer) from comentario where foto_id = foto.id and status = 'S') as comentarios
                       from foto`;
 
 function ajustaAtributos(rows) {
