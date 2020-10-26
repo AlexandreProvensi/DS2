@@ -1,0 +1,34 @@
+<div class="sign">
+    <div class="alert alert-danger" ng-if="fatalError">
+        {{ fatalError }}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="form-group">
+                <input type="text" class="form-control" ng-class="{'is-invalid': failUser}" placeholder="Usuário" ng-model="usuario.username">
+                <div class="invalid-feedback">
+                    {{ msgError }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" ng-class="{'is-invalid': failPass}" placeholder="Senha" ng-model="usuario.password">
+                <div class="invalid-feedback">
+                    {{ msgError }}
+                </div>
+            </div>            
+
+            <div>
+                <button class="btn btn-block btn-primary" ng-click="signin()">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            Não tem uma conta? <a href="#!/signup" class="btn btn-link">Cadastre-se</a>
+        </div>
+    </div>    
+</div>

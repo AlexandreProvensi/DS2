@@ -1,13 +1,13 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'cidade'})
-export class CidadeEntity{
+export class CidadeEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable:false, legth: 50})
+    @Column({nullable: false, length: 50})
     nome: string;
 
-    @Column({nullable: false, legth: 2})
+    @Column({nullable: false, length: 2})
     uf: string;
 }
