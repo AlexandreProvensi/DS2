@@ -1,0 +1,63 @@
+<mat-toolbar>
+    <button mat-icon-button (click)="sidenav_menu.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h2>DS2 - Delivery Xande</h2>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-main">
+
+    <mat-sidenav #sidenav_menu mode="side">
+        <h3 mat-subheader>Menu Principal</h3>
+        <mat-nav-list>
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>border_color</mat-icon>
+                <a matLine routerLink="/pedidos">Pedidos</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>shopping_basket</mat-icon>
+                <a matLine routerLink="/produtos">Produtos</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>people</mat-icon>
+                <a matLine routerLink="/clientes">Clientes</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>perm_contact_calendar</mat-icon>
+                <a matLine routerLink="/operadores">Operadores</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>location_on</mat-icon>
+                <a matLine routerLink="/bairros">Bairros</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+                <mat-icon matListIcon>motorcycle</mat-icon>
+                <a matLine routerLink="/entregadores">Entregadores</a>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

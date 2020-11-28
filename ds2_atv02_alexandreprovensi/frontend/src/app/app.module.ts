@@ -1,24 +1,21 @@
-import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http';
-
+import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { CidadeComponent } from './cidade/cidade.component';
-import { TabelaprecoComponent } from './tabelapreco/tabelapreco.component';
+import { BairroComponent } from './bairro/bairro.component';
 import { ClienteComponent } from './cliente/cliente.component';
-import { ProdutoComponent } from './produto/produto.component';
+import { EntregadorComponent } from './entregador/entregador.component';
+import { OperadorComponent } from './operador/operador.component';
 import { PedidoComponent } from './pedido/pedido.component';
+import { ProdutoComponent } from './produto/produto.component';
+import { StatusEntregaComponent } from './statusentrega/statusentrega.component';
+import { HttpClientModule } from '@angular/common/http';
 
-import { ItempedidoDialogComponent } from './_components/itempedido-dialog/itempedido-dialog.component';
-import { ConfirmDialogComponent } from './_components/confirm-dialog/confirm-dialog.component';
-
-
+//Angular Material
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
@@ -43,24 +40,23 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
 const socketConfig: SocketIoConfig = {url: environment.urlSaaS, options:{}};
 
-
 //Locale do Brasil
 import localept from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
-import { TotalPedidoPipe } from './_pipes/total-pedido.pipe';
+import { ConfirmDialogComponent } from './_components/confirm-dialog/confirm-dialog.component';
 registerLocaleData(localept, 'pt');
 
 @NgModule({
   declarations: [
     AppComponent,
-    CidadeComponent,
-    ConfirmDialogComponent,
-    TabelaprecoComponent,
-    ProdutoComponent,
+    BairroComponent,
     ClienteComponent,
+    EntregadorComponent,
+    OperadorComponent,
     PedidoComponent,
-    ItempedidoDialogComponent,
-    TotalPedidoPipe
+    ProdutoComponent,
+    StatusEntregaComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +86,7 @@ registerLocaleData(localept, 'pt');
     SocketIoModule.forRoot(socketConfig)
   ],
   providers: [
-   {provide: LOCALE_ID, useValue: 'pt'}
+    {provide: LOCALE_ID, useValue: 'pt'}
   ],
   bootstrap: [AppComponent]
 })

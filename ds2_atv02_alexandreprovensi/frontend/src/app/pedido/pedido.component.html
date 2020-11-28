@@ -1,0 +1,152 @@
+<mat-sidenav-container class="sidenav-custom">
+    <mat-sidenav #sidenav position="end" disableClose="true">
+        <mat-toolbar>
+            <h2 *ngIf="!pedido.id">Adicionar Pedido</h2>
+            <h2 *ngIf="pedido.id">Alterar Pedido</h2>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="sidenav.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar>
+
+        <div class="formulario">
+
+            <mat-form-field class="full-width">
+                <textarea matInput placeholder="Valor do Pedido" rows="3" [(ngModel)]="pedido.valor_pedido"></textarea>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-select placeholder="Operador" [(value)]="pedido.operador" [compareWith]="compareOptions">
+                    <mat-option *ngFor="let operador of operadores" [value]="operador">{{operador.username}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-select placeholder="Cliente" [(value)]="pedido.cliente" [compareWith]="compareOptions">
+                    <mat-option *ngFor="let cliente of clientes" [value]="cliente">{{cliente.nome}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-select placeholder="Status Entrega" [(value)]="pedido.statusentrega" [compareWith]="compareOptions">
+                    <mat-option *ngFor="let statusentrega of statusentrega" [value]="status">{{statusentrega.statusentrega}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-select placeholder="Entregador" [(value)]="pedido.entregador" [compareWith]="compareOptions">
+                    <mat-option *ngFor="let entregador of entregadores" [value]="entregador">{{entregador.nome}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class="full-width">
+                <mat-select placeholder="Produto" [(value)]="pedido.produto" [compareWith]="compareOptions">
+                    <mat-option *ngFor="let produto of produtos" [value]="produto">{{produto.nome}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <mat-toolbar>
+            <span class="spacer"></span>
+            <button mat-button (click)="sidenav.close()">Cancelar</button>
+            <button mat-raised-button color="primary" (click)="confirmar()">Confirmar</button>
+        </mat-toolbar>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-card>
+            <mat-card-title>
+                <mat-toolbar color="primary">
+                    <h3>Cadastro de Pedidos</h3>
+                    <span class="spacer"></span>
+
+                    <button mat-icon-button (click)="adicionar()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-toolbar>
+
+                <mat-progress-bar mode="indeterminate" color="warn" *ngIf="loading"></mat-progress-bar>
+            </mat-card-title>
+
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSource" *ngIf="!errorMessage">
+                    <!-- NUMERO PEDIDO -->
+                    <ng-container matColumnDef="numeropedido">
+                        <th mat-header-cell *matHeaderCellDef>Número Pedido</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.id}} </td>
+                    </ng-container>
+
+                    <!-- VALOR PEDIDO -->
+                    <ng-container matColumnDef="valor_pedido">
+                        <th mat-header-cell *matHeaderCellDef>Valor Pedido</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.valor_pedido}} </td>
+                    </ng-container>
+
+                    <!-- OPERADOR -->
+                    <ng-container matColumnDef="operador">
+                        <th mat-header-cell *matHeaderCellDef>Operador</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.operador.username}} </td>
+                    </ng-container>
+
+
+                    <!-- CLIENTE -->
+                    <ng-container matColumnDef="cliente">
+                        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.cliente.nome}} </td>
+                    </ng-container>
+
+
+                    <!-- STATUS -->
+                    <ng-container matColumnDef="statusentrega">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.statusentrega}} </td>
+                    </ng-container>
+
+                    <!-- ENTREGADOR -->
+                    <ng-container matColumnDef="entregador">
+                        <th mat-header-cell *matHeaderCellDef>Entregador</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.entregador.nome}} </td>
+                    </ng-container>
+
+                    <!-- PRODUTO -->
+                    <ng-container matColumnDef="produto">
+                        <th mat-header-cell *matHeaderCellDef>Produtos</th>
+                        <td mat-cell *matCellDef="let pedido"> {{pedido.produto.nome}} </td>
+                    </ng-container>
+
+                    <!-- OPTIONS -->
+                    <ng-container matColumnDef="options">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let pedido">
+                            <button mat-button [matMenuTriggerFor]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="editar(pedido)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Alterar</span>
+                                </button>
+                                <button mat-menu-item (click)="excluir(pedido)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Excluir</span>
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <div class="panel-error" *ngIf="errorMessage">
+                    <img src="assets/oops.png">
+                    <h1 class="mat-h1">Ocorreu um erro!</h1>
+                    <p class="mat-caption">{{ errorMessage }}</p>
+                    <button mat-button color="warn" (click)="ngOnInit()">Tentar Novamente</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-sidenav-content>
+</mat-sidenav-container>
